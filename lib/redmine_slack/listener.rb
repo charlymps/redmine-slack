@@ -1,4 +1,5 @@
 require 'httpclient'
+include ActionController::UrlWriter
 
 class SlackListener < Redmine::Hook::Listener
 	def controller_issues_new_after_save(context={})
@@ -71,7 +72,7 @@ class SlackListener < Redmine::Hook::Listener
 
 		repository = changeset.repository
 
-		revision_url = Rails.application.routes.url_for(
+		revision_url = url_for(
 			:controller => 'repositories',
 			:action => 'revision',
 			:id => repository.project,
@@ -127,7 +128,7 @@ private
 	end
 
 	def object_url(obj)
-		Rails.application.routes.url_for(obj.event_url({:host => Setting.host_name, :protocol => Setting.protocol}))
+		url_for(obj.event_url({:host => Setting.host_name, :protocol => Setting.protocol}))
 	end
 
 	def url_for_project(proj)
